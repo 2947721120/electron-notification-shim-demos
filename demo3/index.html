@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>electron-notification-shim demo 3</title>
+	</head>
+	<body>
+		<h4>Hi =)</h4>
+		<p>Just sending a Notification event to the main process, who will send back another event to us. You should see an alert() popup.</p>
+
+		<script>
+		'use strict';
+			console.log('Sending Notification. It\'ll get intercepted by `electron-notification-shim` and create a new event (`notification-shim`) that gets sent to your main thread. In this demo the event handler in the main thread responds by sending a new event (`notification-shim-demo-event`) back to us, where we catch it and do an annoying alert().');
+			new Notification('Hello!', {content: 'Notification world!'});
+
+			const ipc = require('ipc');
+			ipc.on('notification-shim-demo-event', e => alert(e));
+		</script>
+	</body>
+</html>

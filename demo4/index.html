@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>electron-notification-shim demo 4</title>
+	</head>
+	<body>
+		<h4>Hi =)</h4>
+		<p>Just sending a Notification event to the main process, who will send back another event to us. You should see an alert() popup.</p>
+
+		<button class="notificationButton">Send native Notification event</button>
+
+		<script>
+			'use strict';
+			const btn = document.querySelector('.notificationButton');
+			const originalTitle = document.title;
+			let unreadNotifications = 0;
+
+			console.log('Notifications will get intercepted by `electron-notification-shim` and create a new event (`notification-shim`) that gets sent to your main thread. In this demo the event handler in the main thread responds by sending a new event (`notification-shim-demo-event`) back to us, where we catch it and update an unread message counter in the document title. When the user comes back to this window, the counter is reset. A common scenario would be clicking the notification box and getting the window autofocused.');
+
+			btn.addEventListener('click', () => {
+				// Don't update the notification count here, because Notifications aren't actually sent if the window is focused etc. Allow the events to act as they should, and react instead to the events you get back.
+				new Notification('Hello!', {content: 'Notification world!'});
+			});
+
+			const ipc = require('ipc');
+			ipc.on('notification-shim-demo-event', () => {
+				// Do update the notification count here, so Notification events can be handled naturally. In case the window was focused, or the user has Notifications off, etc.
+				console.log('got notification shim event');
+				unreadNotifications++;
+				document.title = `(${unreadNotifications}) ${originalTitle}`;
+			});
+			ipc.on('notifications-shim-demo-focus-event', () => {
+				console.log('got focus event');
+				unreadNotifications = 0;
+				document.title = originalTitle;
+			});
+		</script>
+	</body>
+</html>
