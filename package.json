@@ -22,8 +22,6 @@
     "electron",
     "electron-notification-shim",
     "demo",
-    "app",
-    "dev",
     "notification",
     "notify",
     "toaster",
