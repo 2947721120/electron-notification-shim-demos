@@ -13,8 +13,8 @@
 			console.log('Sending Notification. It\'ll get intercepted by `electron-notification-shim` and create a new event (`notification-shim`) that gets sent to your main thread. In this demo the event handler in the main thread responds by sending a new event (`notification-shim-demo-event`) back to us, where we catch it and do an annoying alert().');
 			new Notification('Hello!', {content: 'Notification world!'});
 
-			const ipc = require('ipc');
-			ipc.on('notification-shim-demo-event', e => alert(e));
+			const ipc = require('electron').ipcRenderer;
+			ipc.on('notification-shim-demo-event', (e, arg) => alert(arg));
 		</script>
 	</body>
 </html>
