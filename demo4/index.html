@@ -16,14 +16,14 @@
 			const originalTitle = document.title;
 			let unreadNotifications = 0;
 
-			console.log('Notifications will get intercepted by `electron-notification-shim` and create a new event (`notification-shim`) that gets sent to your main thread. In this demo the event handler in the main thread responds by sending a new event (`notification-shim-demo-event`) back to us, where we catch it and update an unread message counter in the document title. When the user comes back to this window, the counter is reset. A common scenario would be clicking the notification box and getting the window autofocused.');
+			console.log('Notifications will get intercepted by `electron-notification-shim` and create a new event (`notification-shim`) that gets sent to your main thread. In this demo the event handler in the main thread responds by sending a new event (`notification-shim-demo-event`) back to us, where we catch it and update an unread message counter in the document title. When the user comes back to this window, the counter is reset. A common scenario would be clicking the notification box and getting the window autofocused. To try it: click the button then quickly switch to another application so this demo window looses focus, then click the notification toaster and this window should get focused again.');
 
 			btn.addEventListener('click', () => {
 				// Don't update the notification count here, because Notifications aren't actually sent if the window is focused etc. Allow the events to act as they should, and react instead to the events you get back.
 				new Notification('Hello!', {content: 'Notification world!'});
 			});
 
-			const ipc = require('ipc');
+			const ipc = require('electron').ipcRenderer;
 			ipc.on('notification-shim-demo-event', () => {
 				// Do update the notification count here, so Notification events can be handled naturally. In case the window was focused, or the user has Notifications off, etc.
 				console.log('got notification shim event');

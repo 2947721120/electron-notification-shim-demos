@@ -1,13 +1,13 @@
 // Main process
 'use strict';
-const app = require('app');
-const ipc = require('ipc');
 const path = require('path');
+const app = require('app');
+const ipc = require('electron').ipcMain;
 const BrowserWindow = require('browser-window');
 
 app.on('ready', () => {
 	const win = new BrowserWindow({
-		'web-preferences': {
+		webPreferences: {
 			// Load `electron-notification-shim` in rendering view.
 			preload: path.join(__dirname, 'browser.js')
 		}
@@ -18,6 +18,6 @@ app.on('ready', () => {
 		console.log(`Title: ${msg.title}, Content: ${msg.options.content}`);
 		e.sender.send('notification-shim-demo-event', 'Hello to you too!');
 	});
-	win.loadUrl(`file://${__dirname}/index.html`);
+	win.loadURL(`file://${__dirname}/index.html`);
 	win.openDevTools();
 });

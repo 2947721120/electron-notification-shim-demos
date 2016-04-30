@@ -1,13 +1,13 @@
 // Main process
 'use strict';
-const app = require('app');
-const ipc = require('ipc');
 const path = require('path');
+const app = require('app');
+const ipc = require('electron').ipcMain;
 const BrowserWindow = require('browser-window');
 
 app.on('ready', () => {
 	const win = new BrowserWindow({
-		'web-preferences': {
+		webPreferences: {
 			// Load `electron-notification-shim` in rendering view.
 			preload: path.join(__dirname, 'browser.js')
 		}
@@ -19,7 +19,7 @@ app.on('ready', () => {
 	});
 
 	// Just to test. Don't do this at home, kids. :)
-	win.loadUrl(`https://google.com`);
+	win.loadURL(`https://google.com`);
 	win.webContents.on('did-finish-load', () => {
 		win.webContents.executeJavaScript('new Notification("Hello!", {content: "Notification world!"})');
 	});

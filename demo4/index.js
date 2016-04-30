@@ -1,23 +1,24 @@
 // Main process
 'use strict';
-const app = require('app');
-const ipc = require('ipc');
 const path = require('path');
+const app = require('app');
+const ipc = require('electron').ipcMain;
 const BrowserWindow = require('browser-window');
 
 function createWindow(xOffset, yOffset) {
 	const win = new BrowserWindow({
-		'x': xOffset,
-		'y': yOffset,
+		x: xOffset,
+		y: yOffset,
 
-		'web-preferences': {
+		webPreferences: {
 			// Load `electron-notification-shim` in rendering view.
 			preload: path.join(__dirname, 'browser.js')
 		}
 	});
 
-	win.loadUrl(`file://${__dirname}/index.html`);
+	win.loadURL(`file://${__dirname}/index.html`);
 	win.on('focus', () => win.webContents.send('notifications-shim-demo-focus-event'));
+	win.openDevTools();
 }
 
 app.on('ready', () => {
