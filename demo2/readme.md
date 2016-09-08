@@ -1,3 +1,3 @@
-> Simple notification-shim demo for Electron apps with own content
+>简单的演示与自己的内容通知垫片电子应用
 
-Common scenario.
+常见的情况。
